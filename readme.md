@@ -4,11 +4,11 @@ See project documentation here: https://github.com/Codeception/VisualCeption
 
 # Installation
 
-`composer require "nixdrey/wbisualception:*" --dev`
+`composer require "erolatex/wbisualception:*" --dev`
 
 # What added?
 
-## Pixel ratio support
+## Pixel ratio support and png compression level options
 
 If you use mobile emulation with custom pixelRatio option you need to define pixelRatio for VisualCeption as well:
 
@@ -41,10 +41,10 @@ modules:
 ```
 
 
-Just add imageQuality option
+If you want to change png compression level of all screenshots just add compressionLevel option:[](https://)
 
 ```
 modules:
     enabled:
-            imageQuality: 65                                       # quality of captured screenshots (default 0)
+            compressionLevel: 0                                       # compression for png images 0-9 ( default:0 )
 ```

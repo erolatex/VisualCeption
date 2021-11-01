@@ -25,7 +25,7 @@ class VisualCeption extends CodeceptionModule
         'maximumDeviation' => 0,
         'saveCurrentImageIfFailure' => true,
         'pixelRatio' => 1.0,
-        'imageQuality' => 100,
+        'compressionLevel' => 0,
         'referenceImageDir' => 'VisualCeption/',
         'currentImageDir' => 'debug/visual/',
         'report' => false,
@@ -35,7 +35,7 @@ class VisualCeption extends CodeceptionModule
     
     protected $saveCurrentImageIfFailure;
     protected $pixelRatio;
-    protected $imageQuality;
+    protected $compressionLevel;
     private $referenceImageDir;
 
     /**
@@ -83,7 +83,7 @@ class VisualCeption extends CodeceptionModule
         $this->maximumDeviation = $this->config["maximumDeviation"];
         $this->saveCurrentImageIfFailure = (boolean)$this->config["saveCurrentImageIfFailure"];
         $this->pixelRatio = (float)$this->config["pixelRatio"];
-        $this->imageQuality = (int)$this->config["imageQuality"];
+        $this->compressionLevel = (int)$this->config["compressionLevel"];
         $this->referenceImageDir = (file_exists($this->config["referenceImageDir"]) ? "" : codecept_data_dir()) . $this->config["referenceImageDir"];
 
         if (!is_dir($this->referenceImageDir)) {
@@ -410,8 +410,7 @@ class VisualCeption extends CodeceptionModule
 
         $elementPath = $this->getScreenshotPath($identifier);
         $screenShotImage = new \Imagick();
-
-        $screenShotImage->setCompressionQuality($this->config['imageQuality']);
+        $screenShotImage->setOption('png:compression-level', $this->config['compressionLevel']);
 
         $this->hideElementsForScreenshot($excludeElements);
 
@@ -535,6 +534,8 @@ class VisualCeption extends CodeceptionModule
 
         $imagick1 = new \Imagick($image1);
         $imagick2 = new \Imagick($image2);
+        $imagick1->setOption('png:compression-level', $this->config['compressionLevel']);
+        $imagick2->setOption('png:compression-level', $this->config['compressionLevel']);
 
         $imagick1Size = $imagick1->getImageGeometry();
         $imagick2Size = $imagick2->getImageGeometry();
