@@ -1,6 +1,6 @@
 {
-  "name": "nixdrey/wbisualception",
-  "description": "Visual regression tests for Codeception (fork from https://github.com/Codeception/VisualCeption)",
+  "name": "erolatex/wbisualception",
+  "description": "Visual regression tests for Codeception (fork from https://github.com/nixdrey/VisualCeption)",
   "homepage": "https://github.com/nixdrey/VisualCeption",
   "license": "Apache-2.0",
   "require": {

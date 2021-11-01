@@ -25,6 +25,7 @@ class VisualCeption extends CodeceptionModule
         'maximumDeviation' => 0,
         'saveCurrentImageIfFailure' => true,
         'pixelRatio' => 1.0,
+        'imageQuality' => 100,
         'referenceImageDir' => 'VisualCeption/',
         'currentImageDir' => 'debug/visual/',
         'report' => false,
@@ -34,6 +35,7 @@ class VisualCeption extends CodeceptionModule
     
     protected $saveCurrentImageIfFailure;
     protected $pixelRatio;
+    protected $imageQuality;
     private $referenceImageDir;
 
     /**
@@ -81,6 +83,7 @@ class VisualCeption extends CodeceptionModule
         $this->maximumDeviation = $this->config["maximumDeviation"];
         $this->saveCurrentImageIfFailure = (boolean)$this->config["saveCurrentImageIfFailure"];
         $this->pixelRatio = (float)$this->config["pixelRatio"];
+        $this->imageQuality = (int)$this->config["imageQuality"];
         $this->referenceImageDir = (file_exists($this->config["referenceImageDir"]) ? "" : codecept_data_dir()) . $this->config["referenceImageDir"];
 
         if (!is_dir($this->referenceImageDir)) {
@@ -407,6 +410,8 @@ class VisualCeption extends CodeceptionModule
 
         $elementPath = $this->getScreenshotPath($identifier);
         $screenShotImage = new \Imagick();
+
+        $screenShotImage->setCompressionQuality($this->config['imageQuality']);
 
         $this->hideElementsForScreenshot($excludeElements);
 

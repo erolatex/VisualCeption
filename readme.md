@@ -6,7 +6,6 @@ See project documentation here: https://github.com/Codeception/VisualCeption
 
 `composer require "nixdrey/wbisualception:*" --dev`
 
-
 # What added?
 
 ## Pixel ratio support
@@ -39,4 +38,13 @@ modules:
             maximumDeviation: 0.05                                 # deviation in percent
             saveCurrentImageIfFailure: false                       # if true, VisualCeption saves the current
             pixelRatio: 3.0                                        # pixel ratio
+```
+
+
+Just add imageQuality option
+
+```
+modules:
+    enabled:
+            imageQuality: 65                                       # quality of captured screenshots (default 0)
 ```
