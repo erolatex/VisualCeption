@@ -1,7 +1,7 @@
 <?php
 namespace Codeception\Module;
 
-use Codeception\Lib\Interfaces\MultiSession as MultiSessionInterface;
+use Codeception\Lib\Interfaces\MultiSession;
 use Codeception\Module as CodeceptionModule;
 use Codeception\Test\Descriptor;
 use Facebook\WebDriver\Exception\UnknownServerException;
@@ -21,7 +21,7 @@ use Codeception\TestInterface;
  * @author Sebastian Neubert
  * @author Ray Romanov
  */
-class VisualCeption extends CodeceptionModule implements MultiSessionInterface
+class VisualCeption extends CodeceptionModule implements MultiSession
 {
     protected $config = [
         'maximumDeviation' => 0,
@@ -68,11 +68,6 @@ class VisualCeption extends CodeceptionModule implements MultiSessionInterface
      */
     private $test;
 
-    /**
-     * @var string
-     */
-    private $currentEnvironment;
-
     private $failed = array();
     private $logFile;
     private $templateVars = array();
@@ -97,7 +92,6 @@ class VisualCeption extends CodeceptionModule implements MultiSessionInterface
 
     public function _beforeSuite($settings = [])
     {
-        $this->currentEnvironment = key_exists('current_environment', $settings) ? $settings['current_environment'] : null;
         $this->_initVisualReport();
     }
 
@@ -333,6 +327,9 @@ class VisualCeption extends CodeceptionModule implements MultiSessionInterface
     {
         if (is_null($elementId)) {
             $elementId = 'body';
+        } else {
+            // escape double quotes to not break JavaScript commands
+            $elementId = str_replace('"', '\\"', $elementId);
         }
 
         $elementExists = (bool)$this->webDriver->executeScript('return document.querySelectorAll( "' . $elementId . '" ).length > 0;');
@@ -567,9 +564,6 @@ class VisualCeption extends CodeceptionModule implements MultiSessionInterface
             return;
         }
         $filename = 'vcresult';
-        if ($this->currentEnvironment) {
-            $filename .= '.' . $this->currentEnvironment;
-        }
         $this->logFile = \Codeception\Configuration::logDir() . $filename . '.html';
 
         if (array_key_exists('templateVars', $this->config)) {
@@ -617,17 +611,6 @@ class VisualCeption extends CodeceptionModule implements MultiSessionInterface
 
     public function _closeSession($session = null)
     {
-        if (!$session and $this->webDriver) {
-            $session = $this->webDriver;
-        }
-        if (!$session) {
-            return;
-        }
-        try {
-            $session->quit();
-            unset($webDriver);
-        } catch (UnknownServerException $e) {
-            // Session already closed so nothing to do
-        }
+        // this method will never be needed
     }
 }
